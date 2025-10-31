@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>2003年 F1チーム運営シミュレーション</title>
+    <style>
+        /* 見た目をちょっとだけ整えます！ */
+        body { font-family: sans-serif; padding: 20px; }
+        h1 { font-size: 24px; }
+        h2 { font-size: 18px; border-bottom: 2px solid #ccc; }
+        button { padding: 10px; font-size: 16px; margin: 5px; }
+        #game-screen { margin-top: 20px; }
+        .choice-button {
+            display: block; width: 300px; text-align: left;
+        }
+        .driver-list-container {
+            max-height: 400px; /* 高さを400pxに制限 */
+            overflow-y: auto; /* 縦スクロールバーを出す */
+            border: 1px solid #ccc;
+            padding: 5px;
+            margin-top: 10px;
+        }
+        .driver-button {
+            display: block; width: 95%; text-align: left;
+            margin-bottom: 8px; /* ボタンの間隔を空ける */
+            line-height: 1.4; /* 行間を少し広げる */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🏎️ 2003年 F1チーム運営シミュレーション</h1>
+    
+    <div id="game-screen">
+        <h2 id="screen-title">ロード中...</h2>
+        <div id="screen-content">
+            <p>ゲームデータを読み込んでいます...</p>
+        </div>
+    </div>
+
+    <script src="gameData.js"></script>
+    <script src="game.js"></script>
+    
+</body>
+</html>
