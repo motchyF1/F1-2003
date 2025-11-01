@@ -37,9 +37,17 @@ function updateTeamStatusDisplay(elementId, showFull) {
     html += "<p><b>資金:</b> " + playerTeam.money + "万ドル</p>";
 
     if (showFull) {
+        let tyreDisplayName = "未選択";
+        if (playerTeam.tyre === "Bridgestone") {
+            tyreDisplayName = "ブリヂストン";
+        } else if (playerTeam.tyre === "Michelin") {
+            tyreDisplayName = "ミシュラン";
+        } else if (playerTeam.tyre) { // (もし "未選択" 以外で上記以外なら、そのまま表示)
+            tyreDisplayName = playerTeam.tyre;
+        }
         html += "<h3>現在のチーム状況 (" + (playerTeam.teamName || "未定") + ")</h3>" + // チーム名がない場合も考慮
                 "<p><b>ベースマシン:</b> " + (playerTeam.chassis ? playerTeam.chassis.name : "未選択") +
-                " (タイヤ: " + (playerTeam.tyre || "未選択") + ")</p>" +
+                " (タイヤ: " + tyreDisplayName + ")</p>" +
                 "<p><b>エンジン:</b> " + (playerTeam.engine ? playerTeam.engine.name : "未選択") + "</p>" +
                 "<p><b>ドライバー1:</b> " + (playerTeam.driver1 ? playerTeam.driver1.name : "未契約") + "</p>" +
                 "<p><b>ドライバー2:</b> " + (playerTeam.driver2 ? playerTeam.driver2.name : "未契約") + "</p>";
@@ -218,10 +226,10 @@ function showTyreSelectionScreen() {
     contentElement.innerHTML = ""; 
     
     contentElement.innerHTML = 
-        "<p>契約するタイヤサプライヤーを2社から選んでください（無料です）</p>" +
-        "<button id='tyre-bs' class='choice-button'>ブリヂストン (Bridgestone)<br>" +
+        "<p>契約するタイヤサプライヤーを選んでください（無料です）</p>" +
+        "<button id='tyre-bs' class='choice-button'>ブリヂストン<br>" +
         "※雨(20%の確率で発生)ではコーナリングスピード +3</button>" +
-        "<button id='tyre-mi' class='choice-button'>ミシュラン (Michelin)<br>" +
+        "<button id='tyre-mi' class='choice-button'>ミシュラン<br>" +
         "※第2戦マレーシアGP / 第13戦ハンガリーGP ではコーナリングスピード +3</button>";
 
     document.getElementById("tyre-bs").onclick = function() { selectTyre("Bridgestone"); };
@@ -1747,9 +1755,9 @@ function showOffSeasonTyreScreen() {
 
     contentElement.innerHTML =
         "<p>来シーズン使用するタイヤサプライヤーを選んでください（無料です）</p>" +
-        "<button id='tyre-bs-off' class='choice-button'>ブリヂストン (Bridgestone)<br>" +
+        "<button id='tyre-bs-off' class='choice-button'>ブリヂストン<br>" +
         "※雨(20%の確率で発生)ではコーナリングスピード +3" +
-        "<button id='tyre-mi-off' class='choice-button'>ミシュラン (Michelin)<br>" +
+        "<button id='tyre-mi-off' class='choice-button'>ミシュラン<br>" +
         "※第2戦マレーシアGP / 第13戦ハンガリーGP ではコーナリングスピード +3</button>" +
         "<hr><p><b>現在の資金: " + playerTeam.money + "万ドル</b></p>"; // 資金表示
 
