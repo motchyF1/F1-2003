@@ -134,7 +134,7 @@ function initializeGame() {
  */
 function showTeamNameScreen() {
     console.log("チーム名入力画面を表示します");
-    titleElement.textContent = "ステップ0: チーム名登録";
+    titleElement.textContent = "チーム名登録";
     contentElement.innerHTML = ""; 
     
     contentElement.innerHTML = 
@@ -170,7 +170,7 @@ function selectTeamName(name) {
  */
 function showChassisSelectionScreen() {
     console.log("シャシー選択画面を表示します");
-    titleElement.textContent = "ステップ1: シャシー選択";
+    titleElement.textContent = "シャシー選択";
     contentElement.innerHTML = ""; 
     
     const description = document.createElement("p");
@@ -214,7 +214,7 @@ function selectChassis(selectedChassis) {
  */
 function showTyreSelectionScreen() {
     console.log("タイヤ選択画面を表示します");
-    titleElement.textContent = "ステップ2: タイヤサプライヤー選択";
+    titleElement.textContent = "タイヤサプライヤー選択";
     contentElement.innerHTML = ""; 
     
     contentElement.innerHTML = 
@@ -244,7 +244,7 @@ function selectTyre(selectedTyre) {
  */
 function showEngineSelectionScreen() {
     console.log("エンジン選択画面を表示します");
-    titleElement.textContent = "ステップ3: エンジンサプライヤー契約";
+    titleElement.textContent = "エンジンサプライヤー契約";
     contentElement.innerHTML = ""; 
     
     const description = document.createElement("p");
@@ -303,7 +303,7 @@ function showDriverSelectionScreen() {
     const driverCountText = (playerTeam.driver1 === null) ? "1人目" : "2人目";
     console.log("ドライバー契約画面 (" + driverCountText + ") を表示します");
     
-    titleElement.textContent = "ステップ4: ドライバー契約 (" + driverCountText + " / 2人)";
+    titleElement.textContent = "ドライバー契約 (" + driverCountText + " / 2人)";
     contentElement.innerHTML = ""; 
     
     contentElement.innerHTML = "<p>獲得可能ドライバーリストから、契約するドライバーを選んでください（契約は1年単位です）</p>";
