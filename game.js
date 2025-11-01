@@ -1,5 +1,5 @@
 /* =================================================================
-   ゲームの心臓部 (game.js) - ★大幅修正版！
+   ゲームの心臓部 (game.js)
 ================================================================= */
 
 // ----------------------------------------------------------------
@@ -38,8 +38,8 @@ function updateTeamStatusDisplay(elementId, showFull) {
 
     if (showFull) {
         html += "<h3>現在のチーム状況 (" + (playerTeam.teamName || "未定") + ")</h3>" + // チーム名がない場合も考慮
-                "<p><b>マシン:</b> " + (playerTeam.chassis ? playerTeam.chassis.name : "未選択") +
-                " (Tyre: " + (playerTeam.tyre || "未選択") + ")</p>" +
+                "<p><b>ベースマシン:</b> " + (playerTeam.chassis ? playerTeam.chassis.name : "未選択") +
+                " (タイヤ: " + (playerTeam.tyre || "未選択") + ")</p>" +
                 "<p><b>エンジン:</b> " + (playerTeam.engine ? playerTeam.engine.name : "未選択") + "</p>" +
                 "<p><b>ドライバー1:</b> " + (playerTeam.driver1 ? playerTeam.driver1.name : "未契約") + "</p>" +
                 "<p><b>ドライバー2:</b> " + (playerTeam.driver2 ? playerTeam.driver2.name : "未契約") + "</p>";
@@ -91,7 +91,7 @@ function getRandomWeightedChoice(choices) {
 // ★★★ お助け関数の移動ここまで ★★★
 
 // ----------------------------------------------------------------
-// 2. ゲームの起動処理 (★カッコの位置を修正！)
+// 2. ゲームの起動処理
 // ----------------------------------------------------------------
 function initializeGame() {
     console.log("ゲーム起動！ (initializeGame)");
@@ -123,7 +123,7 @@ function initializeGame() {
     // 最初の画面は「チーム名入力」から！
     showTeamNameScreen();
 
-} // ★★★ initializeGame 関数の終わりはここです！ ★★★
+}
 
 /* =================================================================
    ロードマップ 2 & 3: チーム立ち上げフェーズ
@@ -138,10 +138,10 @@ function showTeamNameScreen() {
     contentElement.innerHTML = ""; 
     
     contentElement.innerHTML = 
-        "<p>あなたのチームの名前を入力してください。</p>" +
+        "<p>チーム名を入力してください</p>" +
         "<input type='text' id='team-name-input' value='フェニックス・グランプリ' style='font-size: 16px; padding: 5px; width: 300px;'>" +
         "<br><br>" +
-        "<button id='team-name-submit'>この名前で登録する</button>";
+        "<button id='team-name-submit'>エントリー</button>";
     
     // ボタンに関数を割り当てます
     document.getElementById("team-name-submit").onclick = function() {
@@ -159,7 +159,7 @@ function showTeamNameScreen() {
  */
 function selectTeamName(name) {
     playerTeam.teamName = name;
-    console.log("チーム名が「" + name + "」に決まりました");
+    console.log("「" + name + "」のエントリーが受理されました");
     // ステップ1（シャシー選択）に進みます
     showChassisSelectionScreen();
 }
@@ -174,7 +174,7 @@ function showChassisSelectionScreen() {
     contentElement.innerHTML = ""; 
     
     const description = document.createElement("p");
-    description.textContent = "あなたのチームのベースとなるシャシーを3つから選んでください。";
+    description.textContent = "あなたのチームのマシンのベースにするシャシーを選んでください";
     contentElement.appendChild(description);
 
     // 選択肢（シャシー3台）
@@ -187,7 +187,6 @@ function showChassisSelectionScreen() {
     chassisOptions.forEach(chassis => {
         const btn = document.createElement("button");
         btn.className = "choice-button";
-        // ★略さずに書くように直しました！
         btn.innerHTML = chassis.name + "<br>" +
             "(ストレートスピード:" + chassis.straight +
             ", コーナリングスピード:" + chassis.cornering +
@@ -219,11 +218,11 @@ function showTyreSelectionScreen() {
     contentElement.innerHTML = ""; 
     
     contentElement.innerHTML = 
-        "<p>契約するタイヤサプライヤーを2社から選んでください。（無料です）</p>" +
+        "<p>契約するタイヤサプライヤーを2社から選んでください（無料です）</p>" +
         "<button id='tyre-bs' class='choice-button'>ブリヂストン (Bridgestone)<br>" +
-        "【ボーナス】: 雨(20%で発生)の時、コーナリング +3</button>" +
+        "※雨(20%の確率で発生)ではコーナリングスピード +3</button>" +
         "<button id='tyre-mi' class='choice-button'>ミシュラン (Michelin)<br>" +
-        "【ボーナス】: 第2戦マレーシアGP / 第13戦ハンガリーGP の時、コーナリング +3</button>";
+        "※第2戦マレーシアGP / 第13戦ハンガリーGP ではコーナリングスピード +3</button>";
 
     document.getElementById("tyre-bs").onclick = function() { selectTyre("Bridgestone"); };
     document.getElementById("tyre-mi").onclick = function() { selectTyre("Michelin"); };
@@ -249,7 +248,7 @@ function showEngineSelectionScreen() {
     contentElement.innerHTML = ""; 
     
     const description = document.createElement("p");
-    description.textContent = "契約するエンジンを選んでください。（" + playerTeam.year + "年目に契約可能なエンジンのみ表示されます）";
+    description.textContent = "契約するエンジンを選んでください（" + playerTeam.year + "年目に契約可能なエンジンのみ表示されます）";
     contentElement.appendChild(description);
 
     const availableEngines = ENGINE_OPTIONS.filter(engine => engine.availabilityYear <= playerTeam.year);
@@ -259,9 +258,9 @@ function showEngineSelectionScreen() {
         btn.className = "choice-button";
         
         let engineInfo = engine.name + "<br>" +
-            "(ストレートボーナス:" + engine.straightBonus +
-            ", コーナリングボーナス:" + engine.corneringBonus +
-            ", 信頼性ボーナス:" + engine.reliabilityBonus + ")<br>" +
+            "(ストレートへの影響:" + engine.straightBonus +
+            ", コーナリングへの影響:" + engine.corneringBonus +
+            ", 信頼性への影響:" + engine.reliabilityBonus + ")<br>" +
             "【価格】: " + engine.price + "万ドル";
             
         // ★NEW!★ 割引紹介文 (discountText) があれば、それをそのまま表示
@@ -284,7 +283,7 @@ function showEngineSelectionScreen() {
  */
 function selectEngine(selectedEngine) {
     if (playerTeam.money < selectedEngine.price) {
-        alert("資金が足りません！\n" + selectedEngine.name + " は契約できません。");
+        alert("資金が足りません！\n" + selectedEngine.name + " は契約できません");
         return;
     }
     
@@ -299,7 +298,6 @@ function selectEngine(selectedEngine) {
 
 /**
  * ロードマップ 3: ドライバー契約画面
- * (★アメリカGPボーナスの注釈を追加！)
  */
 function showDriverSelectionScreen() {
     const driverCountText = (playerTeam.driver1 === null) ? "1人目" : "2人目";
@@ -308,7 +306,7 @@ function showDriverSelectionScreen() {
     titleElement.textContent = "ステップ4: ドライバー契約 (" + driverCountText + " / 2人)";
     contentElement.innerHTML = ""; 
     
-    contentElement.innerHTML = "<p>「獲得可能ドライバー」リストから、契約するドライバーを選んでください。（契約は1年単位です）</p>";
+    contentElement.innerHTML = "<p>獲得可能ドライバーリストから、契約するドライバーを選んでください（契約は1年単位です）</p>";
 
     const driverListContainer = document.createElement("div");
     driverListContainer.className = "driver-list-container";
@@ -370,7 +368,7 @@ function showDriverSelectionScreen() {
         
         btn.onclick = function() {
             if (driver.salary > 0 && playerTeam.money < driver.salary) {
-                alert("資金が足りません！\n" + driver.name + " とは契約できません。");
+                alert("資金が足りません！\n" + driver.name + " とは契約できません");
             } else {
                 selectDriver(driver);
             }
@@ -433,8 +431,8 @@ function checkEngineDiscount() {
         playerTeam.money += refundAmount;
         console.log("エンジン割引適用！ " + refundAmount + "万ドルが返金されました。");
         
-        alert("🎉 エンジン割引ボーナス！ 🎉\n" +
-              "「" + engine.name + "」の割引条件を満たしました！\n" +
+        alert("エンジン値引き！\n" +
+              "「" + engine.name + "」の値引き条件を満たしました\n" +
               refundAmount + "万ドルがチームに返金されます！\n\n" +
               "現在の資金: " + playerTeam.money + "万ドル");
     }
@@ -446,7 +444,6 @@ function checkEngineDiscount() {
 
 /**
  * 4-1. 開幕前フェーズのメイン画面
- * (★ボタン作成方法を修正！)
  */
 function showPreSeasonScreen() {
     console.log("開幕前フェーズ画面を表示します (" + playerTeam.year + "年目)");
@@ -456,7 +453,7 @@ function showPreSeasonScreen() {
     // --- HTML要素を個別に作成 ---
     const p1 = document.createElement("p");
     // ★チーム名がない場合も考慮
-    p1.innerHTML = "<b>" + (playerTeam.teamName || "あなたのチーム") + "</b> " + playerTeam.year + "年目のシーズンが始まります！ 開幕戦に向けて準備を整えましょう。";
+    p1.innerHTML = "<b>" + (playerTeam.teamName || "あなたのチーム") + "</b> " + playerTeam.year + "年目のシーズンに向けて準備を整えましょう";
     contentElement.appendChild(p1);
 
     // スポンサーボタン作成
@@ -530,7 +527,7 @@ function executeSponsorLottery(currentYear) {
         const rank = getRandomWeightedChoice(probabilities);
         const money = SPONSOR_RANKS[rank];
         totalSponsorMoney += money;
-        lotteryResultsHTML += "<li><b>" + industry + ":</b> " + rank + "ランク！ (+" + money + "万ドル)</li>";
+        lotteryResultsHTML += "<li><b>" + industry + ":</b> " + rank + "ランク スポンサー獲得！ (+" + money + "万ドル)</li>";
     });
 
     lotteryResultsHTML += "</ul><h3>合計獲得金額: " + totalSponsorMoney + "万ドル</h3>";
@@ -560,17 +557,17 @@ function showDevelopmentScreen(isPreSeason, turns) {
     titleElement.textContent = title + " (残り " + turns + " ターン)";
     contentElement.innerHTML = "";
     
-    let descriptionHTML = "<p>「開発」または「アイテム購入」を実行すると、1ターンを消費します。</p>";
+    let descriptionHTML = "<p>「開発」または「アイテム購入」を実行すると、1ターンを消費します</p>";
     if (isPreSeason) {
-        descriptionHTML += "<p>開発ターンが 0 になると、開幕戦に進みます。</p>";
+        descriptionHTML += "<p>開発ターンが 0 になると、開幕戦に進みます</p>";
     } else {
-        descriptionHTML += "<p>開発ターンが 0 になると、「" + RACE_CALENDAR[currentRaceIndex].name + "」の予選に進みます。</p>";
+        descriptionHTML += "<p>開発ターンが 0 になると、「" + RACE_CALENDAR[currentRaceIndex].name + "」の予選に進みます</p>";
     }
     
     let devDriverCount = 0;
     if (playerTeam.driver1.specialAbilityCode === 'DEV_UP') devDriverCount++;
     if (playerTeam.driver2.specialAbilityCode === 'DEV_UP') devDriverCount++;
-    descriptionHTML += "<p><b>開発ボーナス:</b> " + devDriverCount + "人 (大成功確率: ";
+    descriptionHTML += "<p><b>開発効果アップボーナス:</b> " + devDriverCount + "人 (大成功確率: ";
     if (devDriverCount === 0) descriptionHTML += "5%)";
     else if (devDriverCount === 1) descriptionHTML += "15%)";
     else descriptionHTML += "25%)";
@@ -617,7 +614,7 @@ function showDevelopmentScreen(isPreSeason, turns) {
         // 先に appendChild した開発ボタンの onclick が消えちゃう！
         // だから、ここも appendChild を使います！
         const noItemsText = document.createElement("p");
-        noItemsText.textContent = "購入可能な特別アイテムはもうありません。";
+        noItemsText.textContent = "購入可能な特別アイテムはもうありません";
         contentElement.appendChild(noItemsText);
     } else {
         // ★★★ 修正ここまで ★★★
@@ -640,8 +637,8 @@ function showDevelopmentScreen(isPreSeason, turns) {
             if (item.effects.stability > 0) effectsText.push("安定感 +" + item.effects.stability);
             else if (item.effects.stability < 0) effectsText.push("安定感 " + item.effects.stability);
 
-            itemBtn.innerHTML = "<b>" + item.name + "</b> [" + effectsText.join(", ") + "]<br>" +
-                              "<b>【コスト】: " + item.cost + "万ドル</b>";
+            itemBtn.innerHTML = "<b>" + item.name + "</b>  (" + effectsText.join(", ") + ")<br>" +
+                              "<b>コスト: " + item.cost + "万ドル</b>";
             
             if (playerTeam.money < item.cost) {
                 itemBtn.disabled = true;
@@ -667,7 +664,7 @@ function showDevelopmentScreen(isPreSeason, turns) {
             showDevelopmentScreen(isPreSeason, playerTeam.developmentTurnsLeft);
         } else {
             if (isPreSeason) {
-                alert("開発ターンが 0 になりました！\nいよいよシーズン開幕です！");
+                alert("残り開発ターンが 0 になりました！\nいよいよシーズン開幕です！");
                 showSeasonScreen(); // 開幕戦へ
             } else {
                 console.log("シーズン中開発終了。予選へ");
@@ -723,22 +720,22 @@ function executeItemPurchase(item, isPreSeason) {
     if (effects.straight !== 0) {
         const oldVal = spec.straight;
         spec.straight = Math.max(0, Math.min(100, oldVal + effects.straight));
-        alertMessage += "\nストレート: " + oldVal + " -> " + spec.straight + " (" + (effects.straight > 0 ? "+" : "") + effects.straight + ")";
+        alertMessage += "\nストレート: " + oldVal + " → " + spec.straight + " (" + (effects.straight > 0 ? "+" : "") + effects.straight + ")";
     }
     if (effects.cornering !== 0) {
         const oldVal = spec.cornering;
         spec.cornering = Math.max(0, Math.min(100, oldVal + effects.cornering));
-        alertMessage += "\nコーナリング: " + oldVal + " -> " + spec.cornering + " (" + (effects.cornering > 0 ? "+" : "") + effects.cornering + ")";
+        alertMessage += "\nコーナリング: " + oldVal + " → " + spec.cornering + " (" + (effects.cornering > 0 ? "+" : "") + effects.cornering + ")";
     }
     if (effects.reliability !== 0) {
         const oldVal = spec.reliability;
         spec.reliability = Math.max(0, Math.min(100, oldVal + effects.reliability));
-        alertMessage += "\n信頼性: " + oldVal + " -> " + spec.reliability + " (" + (effects.reliability > 0 ? "+" : "") + effects.reliability + ")";
+        alertMessage += "\n信頼性: " + oldVal + " → " + spec.reliability + " (" + (effects.reliability > 0 ? "+" : "") + effects.reliability + ")";
     }
     if (effects.stability !== 0) {
         const oldVal = spec.stability;
         spec.stability = Math.max(0, Math.min(100, oldVal + effects.stability));
-        alertMessage += "\n安定感: " + oldVal + " -> " + spec.stability + " (" + (effects.stability > 0 ? "+" : "") + effects.stability + ")";
+        alertMessage += "\n安定感: " + oldVal + " → " + spec.stability + " (" + (effects.stability > 0 ? "+" : "") + effects.stability + ")";
     }
 
     alert(alertMessage);
@@ -749,7 +746,7 @@ function executeItemPurchase(item, isPreSeason) {
         showDevelopmentScreen(isPreSeason, playerTeam.developmentTurnsLeft);
     } else {
         if (isPreSeason) {
-            alert("開発ターンが 0 になりました！\nいよいよシーズン開幕です！");
+            alert("残り開発ターンが 0 になりました！\nいよいよシーズン開幕です！");
             showSeasonScreen();
         } else {
             console.log("シーズン中開発終了。予選へ");
@@ -778,7 +775,7 @@ function executeDevelopment(type, devDriverCount, isPreSeason) {
 
     // お金が足りるかチェック (上限チェックの後！)
     if (playerTeam.money < DEVELOPMENT_COST) {
-        alert("資金が足りません！ 開発できませんでした。");
+        alert("資金が足りません！ 開発できませんでした");
         return;
     }
 
@@ -815,6 +812,14 @@ function executeDevelopment(type, devDriverCount, isPreSeason) {
         else alertMessage = "エラー？ 安定感の開発で値が増えませんでした。"; // 上限チェックは最初にしたはず
 
     } else { // straight, cornering, reliability
+        let typeDisplay = type; // デフォルトは元の英語
+        if (type === "straight") {
+            typeDisplay = "ストレートスピード";
+        } else if (type === "cornering") {
+            typeDisplay = "コーナリングスピード";
+        } else if (type === "reliability") {
+            typeDisplay = "信頼性";
+        }
         result = getRandomWeightedChoice(probabilities);
         if (result === "great") actualIncrease = 3;
         else if (result === "normal") actualIncrease = 1;
@@ -828,27 +833,48 @@ function executeDevelopment(type, devDriverCount, isPreSeason) {
         if (result === "tradeoff") {
             const specsToReduce = ["straight", "cornering", "reliability"].filter(s => s !== type);
             let downSpecMessage = ""; // 低下メッセージ部分
+
             if (specsToReduce.length > 0) {
-                 const downSpec = specsToReduce[Math.floor(Math.random() * specsToReduce.length)];
-                 if (playerTeam.currentSpec[downSpec] > 0) {
-                     playerTeam.currentSpec[downSpec]--;
-                     downSpecMessage = "\nしかし、" + downSpec + " が -1 されてしまいました…。 (現在値: " + playerTeam.currentSpec[downSpec] + ")";
-                 } else {
-                     downSpecMessage = "\n(トレードオフ発生も、低下対象が0のため影響なし)";
-                 }
+                const downSpec = specsToReduce[Math.floor(Math.random() * specsToReduce.length)];
+                
+                let downSpecDisplay = downSpec;
+                if (downSpec === "straight") downSpecDisplay = "ストレートスピード";
+                else if (downSpec === "cornering") downSpecDisplay = "コーナリング";
+                else if (downSpec === "reliability") downSpecDisplay = "信頼性";
+
+                if (playerTeam.currentSpec[downSpec] > 0) {
+                    // ★低下する前の値(oldDownVal)と、低下した後の値(newDownVal)を取得します
+                    const oldDownVal = playerTeam.currentSpec[downSpec];
+                    playerTeam.currentSpec[downSpec]--;
+                    const newDownVal = playerTeam.currentSpec[downSpec];
+                    downSpecMessage = "\n" + downSpecDisplay + " が -1 されてしまいました(" + oldDownVal + " → " + newDownVal + ")";
+                } else {
+                    downSpecMessage = "\n(" + downSpecDisplay + " は0のため低下しませんでした)";
+                }
             } else {
-                 downSpecMessage = "\n(トレードオフ発生も低下対象なし)";
+                downSpecMessage = "\n(低下対象なし)";
             }
 
-            if (actualIncrease > 0) alertMessage = "トレードオフ発生！\n" + type + " が +" + actualIncrease + (newValue === 100 ? "(上限)" : "") + " されました。" + downSpecMessage;
-            else alertMessage = "トレードオフ発生！\n" + type + " は既に上限です。" + downSpecMessage; // 上限で増えなかった場合
+            if (actualIncrease > 0) {
+                const upperLimitText = (newValue === 100) ? " (上限)" : "";
+                alertMessage = "トレードオフ発生！\n" + 
+                               typeDisplay + " が +" + actualIncrease + " されたものの(" + initialValue + " → " + newValue + upperLimitText + ")、" + 
+                               downSpecMessage; // (downSpecMessage の先頭に \n が入ってるので、くっつけるだけ)
+            } else {
+                // (上がる方がすでに上限だった場合)
+                alertMessage = "トレードオフ発生！\n" + 
+                               typeDisplay + " は既に上限(" + initialValue + ")です" + 
+                               downSpecMessage;
+            }
+            // ★★★ 修正ここまで ★★★
 
         } else { // great or normal
-             if (actualIncrease >= 3 && newValue === 100) alertMessage = "大成功！！\n" + type + " が +" + actualIncrease + " され、上限(100)に達しました！";
-             else if (actualIncrease >= 3) alertMessage = "大成功！！\n" + type + " が +" + actualIncrease + " されました！ (現在値: " + newValue + ")"; // 通常起こらないはず
-             else if (actualIncrease > 0 && newValue === 100) alertMessage = "成功！\n" + type + " が +" + actualIncrease + " され、上限(100)に達しました！";
-             else if (actualIncrease > 0) alertMessage = "成功！\n" + type + " が +" + actualIncrease + " されました。 (現在値: " + newValue + ")";
-             else alertMessage = "エラー？ " + type + "の開発で値が増えませんでした。"; // 上限チェックは最初にしたはず
+             // (ここは「現在値」のまま、変更なしです)
+             if (actualIncrease >= 3 && newValue === 100) alertMessage = "大成功！\n" + typeDisplay + " が +" + actualIncrease + " され、上限(100)に達しました！";
+             else if (actualIncrease >= 3) alertMessage = "大成功！\n" + typeDisplay + " が +" + actualIncrease + " されました (現在値: " + newValue + ")";
+             else if (actualIncrease > 0 && newValue === 100) alertMessage = "成功！\n" + typeDisplay + " が +" + actualIncrease + " され、上限(100)に達しました！";
+             else if (actualIncrease > 0) alertMessage = "成功！\n" + typeDisplay + " が +" + actualIncrease + " されました (現在値: " + newValue + ")";
+             else alertMessage = "エラー？ " + typeDisplay + "の開発で値が増えませんでした"; 
         }
     }
 
@@ -860,7 +886,7 @@ function executeDevelopment(type, devDriverCount, isPreSeason) {
         showDevelopmentScreen(isPreSeason, playerTeam.developmentTurnsLeft);
     } else {
         if (isPreSeason) {
-            alert("開発ターンが 0 になりました！\nいよいよシーズン開幕です！");
+            alert("残り開発ターンが 0 になりました！\nいよいよシーズン開幕です！");
             showSeasonScreen();
         } else {
             console.log("シーズン中開発終了。予選へ");
@@ -875,11 +901,6 @@ function executeDevelopment(type, devDriverCount, isPreSeason) {
 
 /**
  * 5-1. シーズン中のメイン画面（次のレースへ）
- * (★ランキング表示をHTML自動番号に戻す！)
- */
-/**
- * 5-1. シーズン中のメイン画面（次のレースへ）
- * (★ランキング <ol> の style 属性を削除！)
  */
 function showSeasonScreen() {
     if (currentRaceIndex >= RACE_CALENDAR.length) {
@@ -894,7 +915,7 @@ function showSeasonScreen() {
     titleElement.textContent = "シーズン中 (" + (currentRaceIndex + 1) + " / 16 戦)";
     contentElement.innerHTML = "";
 
-    let html = "<p><b>" + (playerTeam.teamName || "あなたのチーム") + "</b>、次のレースは「" + race.name + "」です。</p>";
+    let html = "<p><b>" + (playerTeam.teamName || "あなたのチーム") + "</b>、次戦は「" + race.name + "」です</p>";
 
     // 開発ターン計算
     let turns = 0;
@@ -904,10 +925,10 @@ function showSeasonScreen() {
 
     // 次のアクションボタン
     if (turns > 0) {
-         html += "<p>このレースの前に、" + turns + "ターンの開発期間があります。</p>" +
+         html += "<p>このレースの前に、" + turns + "ターンの開発期間があります</p>" +
                  "<button id='goto-dev-btn'>シーズン中開発へ進む</button>";
     } else {
-        html += "<p>今週はレースウィークです！ 開発ターンはありません。</p>" +
+        html += "<p>今週はレースウィークです！ 開発ターンはありません</p>" +
                 "<button id='goto-race-btn'>予選へ進む</button>";
     }
 
@@ -1013,7 +1034,6 @@ function showQualifyingResultScreen(race, isQualiWet) {
 
     html += "<ol>";
     currentQualiResults.forEach((result, index) => {
-        // ★result.name がフルネームのはず！ ログで確認
         console.log("Quali Result " + (index+1) + ": ", result.name);
         const teamName = (result.teamName === playerTeam.teamName) ? "<b>" + playerTeam.teamName + "</b>" : result.teamName;
         const driverName = (result.teamName === playerTeam.teamName) ? "<b>" + result.name + "</b>" : result.name;
@@ -1191,7 +1211,7 @@ function showRaceResultScreen(race, isRaceWet, raceResults, retiredDrivers, priz
     contentElement.innerHTML = resultHTML;
 
     if (prizeMoney > 0) {
-        alert("入賞しました！ 🏆\nレース賞金として " + prizeMoney + "万ドルを獲得しました！");
+        alert("入賞！ 🏆\n賞金" + prizeMoney + "万ドルを獲得しました！");
     }
 
     // 次のステップへ (変更なし)
@@ -1203,7 +1223,7 @@ function showRaceResultScreen(race, isRaceWet, raceResults, retiredDrivers, priz
             showSeasonScreen();
         };
     } else { /* ... */
-        nextBtn.innerHTML = "次のレースウィークへ進む";
+        nextBtn.innerHTML = "次のレースへ進む";
         nextBtn.onclick = function() {
             currentRaceIndex++;
             showSeasonScreen();
@@ -1309,7 +1329,7 @@ function showSeasonEndScreen() {
     let resultHTML = "<h3>" + playerTeam.year + "年目シーズン、お疲れ様でした！</h3>";
     
     // コンストラクターズランキング (シンプル版)
-    resultHTML += "<h4>コンストラクターズ・ランキング</h4>";
+    resultHTML += "<h4>コンストラクターズランキング</h4>";
     let constructorRanking = [];
     aiTeams.forEach(team => { constructorRanking.push({ name: team.machine.name, points: team.points || 0 }); });
     constructorRanking.push({ name: playerTeam.teamName, points: playerTeam.totalPoints || 0 });
@@ -1329,14 +1349,14 @@ function showSeasonEndScreen() {
     let prizeMoney = 0;
     if (playerRank > 0 && playerRank <= 10) {
          prizeMoney = (11 - playerRank) * 1000;
-         resultHTML += "<p><b>コンストラクターズ " + playerRank + "位 達成！</b><br>" +
-                         "ランキング賞金として <b>" + prizeMoney + "万ドル</b> を獲得しました！</p>";
+         resultHTML += "<p><b>コンストラクターズ " + playerRank + "位！</b><br>" +
+                         "賞金 <b>" + prizeMoney + "万ドル</b> を獲得しました！</p>";
     } else {
-         resultHTML += "<p><b>ランキング賞金は 0 ドルでした… (11位)</b></p>";
+         resultHTML += "<p><b>ランキング最下位のため賞金はありません</b></p>";
     }
     
     // ドライバーズランキング (シンプル版)
-    resultHTML += "<hr><h4>ドライバーズ・ランキング</h4>";
+    resultHTML += "<hr><h4>ドライバーズランキング</h4>";
     let allDriversForRanking = []; // ★NEW!★ 通算成績記録のために、外で宣言
     EXISTING_DRIVERS.forEach(d => {
         let teamName = "フリー";
@@ -1482,7 +1502,7 @@ function showDriverRenewalScreen(driverNumber) {
                " / 決勝速さ:" + driver.rs +
                " / 信頼性:" + driver.reliability +
                " / 安定感:" + driver.stability + "</p>" +
-               "<p><b>【来季年俸】: " + driver.salary + "万ドル</b></p>" +
+               "<p><b>【年俸】: " + driver.salary + "万ドル</b></p>" +
                "<hr>";
 
     // お金が足りるかチェック
@@ -1492,10 +1512,10 @@ function showDriverRenewalScreen(driverNumber) {
     html += "<button id='renew-btn'>契約を更新する</button>";
 
     // 放出ボタン
-    html += "<button id='release-btn' style='margin-left: 10px;'>このドライバーを放出する</button>";
+    html += "<button id='release-btn' style='margin-left: 10px;'>放出する</button>";
 
     if (!canAfford) {
-        html += "<p style='color: red; font-weight: bold;'>※資金不足のため、契約更新はできません！ 放出のみ選択可能です。</p>";
+        html += "<p style='color: red; font-weight: bold;'>※資金不足のため、契約更新はできません！ 放出して他のドライバーを選択してください</p>";
     }
 
     contentElement.innerHTML = html;
@@ -1577,8 +1597,8 @@ function showNewDriverContractScreen() {
     titleElement.textContent = "オフシーズン (" + playerTeam.year + "年目) - 新規ドライバー契約 (" + targetSlotText + ")";
     contentElement.innerHTML = "";
 
-    contentElement.innerHTML = "<p>空いているドライバー枠 (" + targetSlotText + ") に、新しいドライバーを契約します。</p>" +
-                                 "<p>リストから契約したいドライバーを選んでください。（契約は1年単位です）</p>";
+    contentElement.innerHTML = "<p>空いているドライバー枠 (" + targetSlotText + ") に、新しいドライバーを契約します</p>" +
+                                 "<p>獲得可能ドライバーリストから、契約するドライバーを選んでください（契約は1年単位です）</p>";
 
     const driverListContainer = document.createElement("div");
     driverListContainer.className = "driver-list-container"; // スクロールできるように
@@ -1642,7 +1662,7 @@ function showNewDriverContractScreen() {
 
         btn.onclick = function() {
             if (driver.salary > 0 && playerTeam.money < driver.salary) {
-                alert("資金が足りません！\n" + driver.name + " とは契約できません。");
+                alert("資金が足りません！\n" + driver.name + " とは契約できません");
             } else {
                 selectNewDriver(driver, needsDriver1); // (どっちの枠か教えます)
             }
@@ -1726,11 +1746,11 @@ function showOffSeasonTyreScreen() {
     contentElement.innerHTML = "";
 
     contentElement.innerHTML =
-        "<p>来シーズン使用するタイヤサプライヤーを選んでください。（無料です）</p>" +
+        "<p>来シーズン使用するタイヤサプライヤーを選んでください（無料です）</p>" +
         "<button id='tyre-bs-off' class='choice-button'>ブリヂストン (Bridgestone)<br>" +
-        "【ボーナス】: 雨(20%で発生)の時、コーナリング +3</button>" +
+        "※雨(20%の確率で発生)ではコーナリングスピード +3" +
         "<button id='tyre-mi-off' class='choice-button'>ミシュラン (Michelin)<br>" +
-        "【ボーナス】: 第2戦マレーシアGP / 第13戦ハンガリーGP の時、コーナリング +3</button>" +
+        "※第2戦マレーシアGP / 第13戦ハンガリーGP ではコーナリングスピード +3</button>" +
         "<hr><p><b>現在の資金: " + playerTeam.money + "万ドル</b></p>"; // 資金表示
 
     document.getElementById("tyre-bs-off").onclick = function() { selectOffSeasonTyre("Bridgestone"); };
@@ -1763,7 +1783,7 @@ function showOffSeasonEngineScreen() {
     contentElement.innerHTML = "";
 
     contentElement.innerHTML =
-        "<p>来シーズン使用するエンジンを選んでください。</p>" +
+        "<p>来シーズン使用するエンジンを選んでください</p>" +
         "<p>（" + playerTeam.year + "年目に契約可能なエンジンのみ表示されます）</p>";
 
     // 契約可能なエンジンをフィルタリング
@@ -1804,9 +1824,9 @@ function showOffSeasonEngineScreen() {
 
         // ★ここから表示の組み立て★
         let engineInfo = engine.name + "<br>" +
-            "(ストレートボーナス:" + engine.straightBonus +
-            ", コーナリングボーナス:" + engine.corneringBonus +
-            ", 信頼性ボーナス:" + engine.reliabilityBonus + ")<br>" +
+            "(ストレートへの影響:" + engine.straightBonus +
+            ", コーナリングへの影響:" + engine.corneringBonus +
+            ", 信頼性への影響:" + engine.reliabilityBonus + ")<br>" +
             "【価格】: " + engine.price + "万ドル"; // まず定価を表示
         
         // ★NEW!★ 割引紹介文 (discountText) があれば、それをそのまま表示
@@ -1906,10 +1926,10 @@ function selectOffSeasonEngine(selectedEngine, finalPrice) {
 
 
     alert("来シーズンのエンジンとして「" + selectedEngine.name + "」と契約しました！ (" + finalPrice + "万ドル)\n\n" +
-          "【オフシーズン】\n" +
-          "マシン性能が経年劣化により、全スペックが一律で 5 低下しました。\n" +
-          "そのスペックに、新エンジンのボーナスが加算されます。\n\n" +
-          "（★この新しいスペックから、次のシーズンの開幕前開発が始まります！）");
+          "【新車開発】\n" +
+          "①現在のスペックから、ストレート/コーナリング/信頼性/安定感が一律で 5 低下します\n" +
+          "②新たに選択したエンジンによるストレート/コーナリング/信頼性への影響が加算されます\n" +
+          "③そのスペックを起点に、新シーズン用のマシン開発を行ってください");
 
     // 次の年の開幕前フェーズへ！
     console.log("オフシーズン終了。次の年の開幕前フェーズへ進みます。");
@@ -1944,8 +1964,8 @@ function showGameEndingScreen() {
     html += "<h3>通算成績</h3>";
     html += "<ul>";
     html += "<li><b>通算優勝回数:</b> " + (playerTeam.careerWins || 0) + " 回</li>";
-    html += "<li><b>コンストラクターズ・タイトル:</b> " + (playerTeam.careerConstructorTitles || 0) + " 回</li>";
-    html += "<li><b>ドライバーズ・タイトル:</b> " + (playerTeam.careerDriverTitles || 0) + " 回</li>";
+    html += "<li><b>通算コンストラクターズタイトル獲得回数:</b> " + (playerTeam.careerConstructorTitles || 0) + " 回</li>";
+    html += "<li><b>通算ドライバーズタイトル獲得回数:</b> " + (playerTeam.careerDriverTitles || 0) + " 回</li>";
     html += "<li><b>通算獲得ポイント:</b> " + finalPoints + " Pts.</li>";
     html += "<li><b>最終保有資金:</b> " + finalMoney + " 万ドル</li>";
     html += "</ul>";
@@ -1976,7 +1996,7 @@ function showGameEndingScreen() {
 
     // 7. ボタンに関数を割り当て
     document.getElementById("play-again-btn").onclick = function() {
-        if (confirm("本当に最初からやり直しますか？ (このリザルト画面は消えてしまいます)")) {
+        if (confirm("この画面を離れて、もう一度最初からプレイしますか？ (リザルトは保存されます)")) {
             // initializeGame(); だと古いデータが残る可能性があるので、リロードが一番安全です！
             location.reload();
         }

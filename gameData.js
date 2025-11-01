@@ -2,10 +2,6 @@
    1. 基本データの設計図（クラス）
 ================================================================= */
 
-/**
- * ドライバーさんの情報をぜんぶ入れるための設計図です！
- * （既存の20人も、浪人リストの40人も、これを使います）
- */
 class Driver {
     /**
      * @param {string} id - 固有のID（呼び出す時用）
@@ -19,12 +15,6 @@ class Driver {
      * @param {number} contractYears - （既存選手用）残り契約年数
      * @param {string} specialAbilityCode - 特殊能力のコード
      * 'DEV_UP': 開発ボーナス
-     * 'GROW_A': アロンソ型成長
-     * 'GROW_B': ライコネン/バトン型成長
-     * 'GROW_C': ハイドフェルド型成長
-     * 'GROW_D': マッサ型成長
-     * 'GROW_E': ブルーニ型成長
-     * 'GROW_F': ロッテラー/トレルイエ型成長
      * 'RACE_BONUS_JP': 日本GPボーナス（佐藤琢磨選手）
      * 'NONE': なし
      */
@@ -118,17 +108,16 @@ class RaceTrack {
 ================================================================= */
 
 /**
- * プレイヤー（ベンジーさん！）のチーム情報をぜんぶ管理する設計図です！
  * これがゲームの「セーブデータ」の中心になります！
  */
 class PlayerTeam {
     constructor() {
-        this.teamName = "フェニックス・グランプリ"; // ★チーム名を追加しました！
+        this.teamName = "フェニックス・グランプリ"; //
         this.money = 5000; // 初期資金 5000万ドル
         this.year = 1; // 参戦1年目
         this.developmentTurnsLeft = 20; // 開幕前の開発ターン
         
-        // ★★★ 5年間通算成績用の箱 (ここが大事です！) ★★★
+        // ★★★ 5年間通算成績用の箱 ★★★
         this.careerWins = 0; 
         this.careerConstructorTitles = 0;
         this.careerDriverTitles = 0; 
@@ -206,10 +195,10 @@ const EXISTING_MACHINES = {
     "mclaren": new Machine("マクラーレン", 93, 95, 92, 85, "Michelin"),
     "renault": new Machine("ルノー", 88, 96, 75, 88, "Michelin"),
     "sauber": new Machine("ザウバー", 88, 82, 75, 78, "Bridgestone"),
-    "jordan": new Machine("ジョーダン", 83, 80, 70, 75, "Bridgestone"),
+    "jordan": new Machine("ジョーダン", 81, 80, 70, 75, "Bridgestone"),
     "jaguar": new Machine("ジャガー", 86, 83, 72, 72, "Michelin"),
     "bar": new Machine("B.A.R", 93, 85, 75, 75, "Bridgestone"),
-    "minardi": new Machine("ミナルディ", 81, 78, 80, 80, "Bridgestone"),
+    "minardi": new Machine("ミナルディ", 79, 78, 80, 80, "Bridgestone"),
     "toyota": new Machine("トヨタ", 85, 80, 82, 78, "Bridgestone")
 };
 
@@ -220,7 +209,7 @@ const EXISTING_MACHINES = {
 const EXISTING_DRIVERS = [
     // フェラーリ
     new Driver("m_schumacher", "ミハエル・シューマッハー", "ドイツ", 95, 98, 92, 95, 3000, 4, "DEV_UP"),
-    new Driver("barrichello", "ルーベンス・バリチェロ", "ブラジル", 94, 93, 91, 93, 1000, 3, "DEV_UP"),
+    new Driver("barrichello", "ルーベンス・バリチェロ", "ブラジル", 92, 93, 91, 93, 1000, 3, "DEV_UP"),
     // ウィリアムズ
     new Driver("montoya", "ファン・パブロ・モントーヤ", "コロンビア", 95, 95, 88, 85, 1200, 2, "NONE"),
     new Driver("r_schumacher", "ラルフ・シューマッハー", "ドイツ", 91, 91, 85, 78, 700, 2, "NONE"),
@@ -264,7 +253,6 @@ const PLAYER_CHASSIS_OPTIONS = {
 
 // ----------------------------------------------------------------
 // 3-4. プレイヤーが契約できるエンジン
-// (★ユーザー修正により、割引ルールと紹介文を変更！)
 // ----------------------------------------------------------------
 const ENGINE_OPTIONS = [
     // 1年目から
@@ -445,8 +433,7 @@ const DEV_PROB_2 = { "great": 0.25, "normal": 0.50, "tradeoff": 0.25 };
 // (gameData.js のファイルの一番下に追加します)
 
 // ----------------------------------------------------------------
-// 3-9. ★NEW!★ 特別アイテムショップのリスト
-// (5年間で各1回のみ購入可能)
+// 3-9. 特別アイテムショップのリスト(5年間で各1回のみ購入可能)
 // ----------------------------------------------------------------
 const SPECIAL_ITEMS_SHOP = [
     // 500万ドル
@@ -460,6 +447,8 @@ const SPECIAL_ITEMS_SHOP = [
     { id: "item_launch_control", name: "ローンチコントロール改良", cost: 750, effects: { straight: 0, cornering: 0, reliability: 0, stability: 3 } },
     // 1000万ドル
     { id: "item_traction_control", name: "トラクションコントロール改良", cost: 1000, effects: { straight: 0, cornering: 4, reliability: 0, stability: 0 } },
+    // 1250万ドル
+    { id: "item_quality_control", name: "品質管理見直し", cost: 1250, effects: { straight: 0, cornering: 0, reliability: 5, stability: 0 } },
     // 1500万ドル
     { id: "item_seamless_shift", name: "シームレスシフト", cost: 1500, effects: { straight: 3, cornering: 3, reliability: -3, stability: 3 } },
     // 2000万ドル
